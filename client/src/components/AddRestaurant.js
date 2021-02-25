@@ -1,10 +1,9 @@
 import React, { useState, useContext } from "react";
-import Restaurantfinder from "../apis/Restaurantfinder";
+import RestaurantFinder from "../apis/RestaurantFinder";
 import { RestaurantsContext } from "../context/RestaurantsContext";
 
 const AddRestaurant = () => {
   const { addRestaurants } = useContext(RestaurantsContext);
-
   const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [priceRange, setPriceRange] = useState("Price Range");
@@ -12,7 +11,7 @@ const AddRestaurant = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await Restaurantfinder.post("/", {
+      const response = await RestaurantFinder.post("/", {
         name,
         location,
         price_range: priceRange,
@@ -23,7 +22,6 @@ const AddRestaurant = () => {
       console.log(err);
     }
   };
-
   return (
     <div className="mb-4">
       <form action="">
@@ -34,7 +32,7 @@ const AddRestaurant = () => {
               onChange={(e) => setName(e.target.value)}
               type="text"
               className="form-control"
-              placeholder="Name"
+              placeholder="name"
             />
           </div>
           <div className="col">
@@ -43,14 +41,14 @@ const AddRestaurant = () => {
               onChange={(e) => setLocation(e.target.value)}
               className="form-control"
               type="text"
-              placeholder="Location"
+              placeholder="location"
             />
           </div>
           <div className="col">
             <select
               value={priceRange}
               onChange={(e) => setPriceRange(e.target.value)}
-              className="custom-select"
+              className="custom-select my-1 mr-sm-2"
             >
               <option disabled>Price Range</option>
               <option value="1">$</option>

@@ -1,8 +1,8 @@
 import React, { useEffect, useContext } from "react";
-import Restaurantfinder from "../apis/Restaurantfinder";
+import RestaurantFinder from "../apis/RestaurantFinder";
 import { RestaurantsContext } from "../context/RestaurantsContext";
 import { useHistory } from "react-router-dom";
-//import StarRating from "./StarRating";
+import StarRating from "./StarRating";
 
 const RestaurantList = (props) => {
   const { restaurants, setRestaurants } = useContext(RestaurantsContext);
@@ -10,7 +10,8 @@ const RestaurantList = (props) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await Restaurantfinder.get("/");
+        const response = await RestaurantFinder.get("/");
+        console.log(response.data.data);
         setRestaurants(response.data.data.restaurants);
       } catch (err) {}
     };
@@ -21,7 +22,7 @@ const RestaurantList = (props) => {
   const handleDelete = async (e, id) => {
     e.stopPropagation();
     try {
-      const response = await Restaurantfinder.delete(`/${id}`);
+      const response = await RestaurantFinder.delete(`/${id}`);
       setRestaurants(
         restaurants.filter((restaurant) => {
           return restaurant.id !== id;
@@ -41,6 +42,18 @@ const RestaurantList = (props) => {
     history.push(`/restaurants/${id}`);
   };
 
+  const renderRating = (restaurant) => {
+    if (!restaurant.count) {
+      return <span className="text-warning">0 reviews</span>;
+    }
+    return (
+      <>
+        <StarRating rating={restaurant.id} />
+        <span className="text-warning ml-1">({restaurant.count})</span>
+      </>
+    );
+  };
+
   return (
     <div className="list-group">
       <table className="table table-hover table-dark">
@@ -49,7 +62,7 @@ const RestaurantList = (props) => {
             <th scope="col">Restaurant</th>
             <th scope="col">Location</th>
             <th scope="col">Price Range</th>
-            <th scope="col">Rating</th>
+            <th scope="col">Ratings</th>
             <th scope="col">Edit</th>
             <th scope="col">Delete</th>
           </tr>
@@ -65,7 +78,7 @@ const RestaurantList = (props) => {
                   <td>{restaurant.name}</td>
                   <td>{restaurant.location}</td>
                   <td>{"$".repeat(restaurant.price_range)}</td>
-                  <td>reviews</td>
+                  <td>{renderRating(restaurant)}</td>
                   <td>
                     <button
                       onClick={(e) => handleUpdate(e, restaurant.id)}
@@ -85,10 +98,9 @@ const RestaurantList = (props) => {
                 </tr>
               );
             })}
-
           {/* <tr>
-            <td>McDonalds</td>
-            <td>New York</td>
+            <td>mcdonalds</td>
+            <td>New YOrk</td>
             <td>$$</td>
             <td>Rating</td>
             <td>
@@ -97,7 +109,20 @@ const RestaurantList = (props) => {
             <td>
               <button className="btn btn-danger">Delete</button>
             </td>
-          </tr>*/}
+          </tr>
+
+          <tr>
+            <td>mcdonalds</td>
+            <td>New YOrk</td>
+            <td>$$</td>
+            <td>Rating</td>
+            <td>
+              <button className="btn btn-warning">Update</button>
+            </td>
+            <td>
+              <button className="btn btn-danger">Delete</button>
+            </td>
+          </tr> */}
         </tbody>
       </table>
     </div>
