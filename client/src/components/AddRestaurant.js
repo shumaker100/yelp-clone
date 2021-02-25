@@ -16,7 +16,7 @@ const AddRestaurant = () => {
         location,
         price_range: priceRange,
       });
-      console.log(response.data.data);
+
       addRestaurants(response.data.data.restaurant);
     } catch (err) {
       console.log(err);
@@ -48,7 +48,7 @@ const AddRestaurant = () => {
             <select
               value={priceRange}
               onChange={(e) => setPriceRange(e.target.value)}
-              className="custom-select my-1 mr-sm-2"
+              className="custom-select "
             >
               <option disabled>Price Range</option>
               <option value="1">$</option>
